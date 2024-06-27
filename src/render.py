@@ -66,6 +66,11 @@ def render_timeline(json_file_path):
         draw.line([(pos, 340), (pos, 380)], fill=(0, 0, 0), width=4)  # Draw line through the main line
         draw.text((pos - 19, 326), str(timeline_data['start_date'][2] + i), (0, 0, 0), font=font)  # Render year
 
+    # Loop through all the months the timeline covers
+    for i in range((timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1)*12):
+        pos = datenum([1, 1, timeline_data['start_date'][2] // 12 + i]) - start_date  # Get position of the month
+        draw.line([(pos, 330), (pos, 370)], fill=(0, 0, 0), width=4)  # Draw line through the main line
+
     # Draw the top right text
     font_large = ImageFont.truetype(font_path, 36)
     draw.text((10, 10), timeline_data['timeline_name'], (0, 0, 0), font=font_large, align='left', anchor='lt')
