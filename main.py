@@ -3,6 +3,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QFi
 from PyQt5.QtGui import QPixmap
 from src.render import *
 
+# Install dependencies
+install_pillow()
+install_pyqt()
+
 # PyQt Application Window
 class MainWindow(QWidget):
     def __init__(self):
@@ -10,10 +14,6 @@ class MainWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        # Install dependencies
-        install_pillow()
-        install_pyqt()
-
         self.setWindowTitle('ONE-Liner - Timeline Editor')
         self.setGeometry(100, 100, 1400, 820)
 
