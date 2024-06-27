@@ -3,10 +3,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QFi
 from PyQt5.QtGui import QPixmap
 from src.render import *
 
-# Install dependencies
-install_pillow()
-install_pyqt()
-
 # PyQt Application Window
 class MainWindow(QWidget):
     def __init__(self):
