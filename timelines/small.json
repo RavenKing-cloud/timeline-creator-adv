@@ -1,0 +1,13 @@
+{
+    "timeline_name": "CTS  Community  Timeline",
+    "start_date": [2,29,2016],
+    "end_date": [6,26,2016],
+    "events": [
+            {
+                "name": "1.9: The Combat Update",
+                "date": [2,29,2016],
+                "description": "",
+                "images": []
+            }
+    ]
+}
