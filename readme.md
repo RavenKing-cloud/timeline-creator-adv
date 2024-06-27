@@ -15,7 +15,7 @@ PyQt5
 {
     "timeline_name": "Example Timeline Name",
     "start_date": [1,1,2024],
-    "end_date": [6,27,2024],
+    "end_date": [1,1,2025],
     "events": [
             {
                 "name": "Event 1",
@@ -38,6 +38,8 @@ PyQt5
     ]
 }
 ```
+The `start` and `end` dates are given a 6 month padding to the edge of the image so you can see the year markers better.
+
 This example leaves you with this:
 
 ![Example Image](export/example.png)
