@@ -44,7 +44,7 @@ class MainWindow(QWidget):
             # Display the rendered image in QLabel
             pixmap = QPixmap(img_path)
             self.lbl_image.setPixmap(pixmap)
-            self.lbl_image.setScaledContents(True)
+            self.lbl_image.setScaledContents(False)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
