@@ -1,6 +1,5 @@
 import sys
 import os
-import subprocess
 import json
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
