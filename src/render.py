@@ -5,16 +5,6 @@ import json
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
-# Function to install or upgrade PILLOW library
-def install_pyqt():
-    result = subprocess.Popen("pip install --upgrade PyQt5", shell=True, stdout=subprocess.PIPE).stdout.read()
-    print(result)
-
-# Function to install or upgrade PILLOW library
-def install_pillow():
-    result = subprocess.Popen("pip install --upgrade PILLOW", shell=True, stdout=subprocess.PIPE).stdout.read()
-    print(result)
-
 # Function to load JSON from a given file path
 def load_json(file_path):
     with open(file_path) as f:
