@@ -1,11 +1,45 @@
-# Timeline Creator
+## Timeline Creator
+Made by [@TauCommands](https://github.com/TenCommands) & [@RavenKing-cloud](https://github.com/RavenKing-cloud)
+### Requirements:
+PIL
+```pip install --upgrade PILLOW```
 
-Made by TauCommands & RavenKing
+PyQt5
+```pip install --upgrade PyQt5```
+### How to use:
+1. Run the `run.bat` file within the project folder
+2. Click `Open JSON File` and select a JSON file containing the proper values
+3. You can now see your timeline image in the window which you can find in the `export` folder
+4. You can edit the timeline using the `json` file syntax below:
+```json
+{
+    "timeline_name": "Example Timeline Name",
+    "start_date": [1,1,2024],
+    "end_date": [6,27,2024],
+    "events": [
+            {
+                "name": "Event 1",
+                "date": [2,29,2024],
+                "description": "",
+                "images": []
+            },
+            {
+                "name": "Event 2",
+                "date": [3,3,2024],
+                "description": "",
+                "images": []
+            },
+            {
+                "name": "Event 3",
+                "date": [4,24,2024],
+                "description": "",
+                "images": []
+            }
+    ]
+}
+```
+This example leaves you with this:
 
-## How to Use
+![Example Image](export/example.png)
 
-Create your timeline inside of the `timeline.json` file. Set the `timeline_name` property for the text in the top left of the rendered image. Use `start_date` and `end_date` to set the beginning and end of the timeline and the width of the image. Events are the most important part of the timeline. Each event must contain 4 fields; 2 of which (`description` and `images`) are currently unused and therefore can be left empty. The `name` field of an event will be what actually shows on the timeline while the `date` field is where it will show up. Order matters when setting up the timeline. You must have all events listed in chronological order within `timeline.json` in order for it to render correctly. You can modify the font used in the image by dropping a TrueType Font (ttf) file in this folder and renaming it to `font.ttf`. Finally, you can render your image by double-clicking on the `run.bat` file. If you wish to check it for RATS because I know this community doesn't trust me you can open the `run.bat` file inside of a text editor such as Notepad or Visual Studio Code. All you will find is a very simple 2 lines of code that run the `render.py` script and close the batch file.
-
-## The End Goal
-
-This current version of the timeline creator is so that we as a community can put together the most complete history of the cts community easily without things scattered around the image (spending). The end goal of this will be having a completed `timeline.json` file containing every event in the cts community from what lead to its creation all the way to where we are today. This will allow me to create an interactive application where players can scroll along the timeline and select specific events seeing the description of the event along with some fun images and videos from that time. I have already given a little bit of a kickstart to the creation of the `timeline.json` to make it a little easier to understand how to add events to the timeline.
+Please note that the order you enter them into the json file does matter! You should always enter the events in chronological order!
