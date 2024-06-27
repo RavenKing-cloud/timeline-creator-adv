@@ -71,8 +71,10 @@ def render_timeline(json_file_path):
     font_large = ImageFont.truetype(font_path, 36)
     draw.text((10, 10), timeline_data['timeline_name'], (0, 0, 0), font=font_large, align='left', anchor='lt')
 
-    # Save the image
-    img_path = os.path.join(os.path.dirname(__file__), '..', 'export', 'timeline.png')
+    # Save the image with the same name as the JSON file
+    json_file_name = os.path.basename(json_file_path)
+    base_name = os.path.splitext(json_file_name)[0]
+    img_path = os.path.join(os.path.dirname(__file__), '..', 'export', f'{base_name}.png')
     img.save(img_path)
 
     # Return the path to the saved image
