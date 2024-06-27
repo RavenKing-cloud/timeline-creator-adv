@@ -38,6 +38,8 @@ PyQt5
     ]
 }
 ```
+The `start` and `end` dates are given a 6 month padding to the edge of the image so you can see the year markers better.
+
 This example leaves you with this:
 
 ![Example Image](export/example.png)
