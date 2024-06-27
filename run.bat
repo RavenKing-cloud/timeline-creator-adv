@@ -1,3 +1,3 @@
 @echo off
-python render.py %*
+python main.py %*
 exit
