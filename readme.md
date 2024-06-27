@@ -15,7 +15,7 @@ PyQt5
 {
     "timeline_name": "Example Timeline Name",
     "start_date": [1,1,2024],
-    "end_date": [6,27,2024],
+    "end_date": [1,1,2025],
     "events": [
             {
                 "name": "Event 1",
