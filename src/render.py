@@ -47,12 +47,12 @@ def render_timeline(json_file_path):
         text_draw.text((0, 0), name, (0, 0, 0), font=font)
 
         if event_num % 2 == 1:
-            draw.line([(pos, 360), (pos, 340), (pos + 20, 320)], fill=(0, 0, 0), width=4)
+            draw.line([(pos, 360), (pos, 340), (pos + 20, 320)], fill=(0, 0, 0), width=2)
             rotated_text_img = text_img.rotate(45, expand=True)
             x = pos + 232 - rotated_text_img.width // 2
             y = 244 - rotated_text_img.height // 2
         else:
-            draw.line([(pos, 360), (pos, 380), (pos + 20, 400)], fill=(0, 0, 0), width=4)
+            draw.line([(pos, 360), (pos, 380), (pos + 20, 400)], fill=(0, 0, 0), width=2)
             rotated_text_img = text_img.rotate(-45, expand=True)
             x = pos + 97 - rotated_text_img.width // 2
             y = 612 - rotated_text_img.height // 2
@@ -66,9 +66,9 @@ def render_timeline(json_file_path):
         draw.text((pos - 19, 326), str(timeline_data['start_date'][2] + i), (0, 0, 0), font=font)  # Render year
 
     # Loop through all the months the timeline covers
-    for i in range((timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1)*12):
-        pos = datenum([1, 1, timeline_data['start_date'][2] // 12 + i]) - start_date  # Get position of the month
-        draw.line([(pos, 330), (pos, 370)], fill=(0, 0, 0), width=4)  # Draw line through the main line
+    for i in range((timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1)*12 - 1):
+        pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the month
+        draw.line([(pos // 12 - 4, 355), (pos // 12 - 4, 365)], fill=(0, 0, 0), width=4)  # Draw line through the main line
 
     # Draw the top right text
     font_large = ImageFont.truetype(font_path, 36)
