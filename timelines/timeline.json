@@ -1,109 +1,497 @@
 {
     "timeline_name": "CTS  Community  Timeline",
-    "start_date": [2,29,2016],
-    "end_date": [6,26,2024],
+    "start_date": [
+        2,
+        29,
+        2016
+    ],
+    "end_date": [
+        6,
+        26,
+        2024
+    ],
     "events": [
-            {
-                "name": "1.9: The Combat Update",
-                "date": [2,29,2016],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "1.14.3 - Combat Test",
-                "date": [6,26,2019],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 2",
-                "date": [8,15,2019],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 3",
-                "date": [11,1,2019],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 4",
-                "date": [11,29,2019],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 5",
-                "date": [1,16,2020],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 6",
-                "date": [8,7,2020],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 7c",
-                "date": [8,14,2020],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 8b",
-                "date": [8,21,2020],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Test 8c",
-                "date": [8,26,2020],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Minemanner Wave",
-                "date": [2,11,2022],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Reforged Shut Down",
-                "date": [2,20,2022],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Reforged Opens Under Venade",
-                "date": [3,1,2022],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Rafunny becomes the official best",
-                "date": [3,14,2022],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Combat Enhanced Re-opens",
-                "date": [3,19,2022],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "EternalPVP shuts down",
-                "date": [3,29,2022],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "NewPvP shuts down",
-                "date": [4,1,2022],
-                "description": "",
-                "images": []
-            }
+        {
+            "name": "1.9: The Combat Update",
+            "date": [
+                2,
+                29,
+                2016
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "1.14.3 - Combat Test",
+            "date": [
+                6,
+                26,
+                2019
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 2",
+            "date": [
+                8,
+                15,
+                2019
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 3",
+            "date": [
+                11,
+                1,
+                2019
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 4",
+            "date": [
+                11,
+                29,
+                2019
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 5",
+            "date": [
+                1,
+                16,
+                2020
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 6",
+            "date": [
+                8,
+                7,
+                2020
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 7c",
+            "date": [
+                8,
+                14,
+                2020
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 8b",
+            "date": [
+                8,
+                21,
+                2020
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Test 8c",
+            "date": [
+                8,
+                26,
+                2020
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Minemanner Wave",
+            "date": [
+                2,
+                11,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Reforged Shut Down",
+            "date": [
+                2,
+                20,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Reforged Opens Under Venade",
+            "date": [
+                3,
+                1,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Rafunny becomes the official best",
+            "date": [
+                3,
+                14,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Combat Enhanced Re-opens",
+            "date": [
+                3,
+                19,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "EternalPVP shuts down",
+            "date": [
+                3,
+                29,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "NewPvP shuts down",
+            "date": [
+                4,
+                1,
+                2022
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Fractal Teams hyped up",
+            "date": [
+                4,
+                10,
+                2022
+            ],
+            "description": "",
+            "images": [
+                "images\\test.png"
+            ]
+        },
+        {
+            "name": "CTS Tier List shuts down",
+            "date": [
+                4,
+                11,
+                2022
+            ],
+            "description": "",
+            "images": [
+                "images\\test.png"
+            ]
+        },
+        {
+            "name": "Martin6969420 Caught Hacking",
+            "date": [
+                4,
+                15,
+                2022
+            ],
+            "description": "1st Closet Cheater",
+            "images": [
+                "images\\test.png"
+            ]
+        },
+        {
+            "name": "Fractal Shuts Down",
+            "date": [
+                5,
+                15,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Zqwt Pedophile Caught",
+            "date": [
+                6,
+                6,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Enhanced SMP starts",
+            "date": [
+                7,
+                3,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "TheMisterEpic Wave",
+            "date": [
+                7,
+                23,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Axolotl Client releases",
+            "date": [
+                7,
+                26,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Atlas Combat Started being developed",
+            "date": [
+                8,
+                2,
+                2022
+            ],
+            "description": "Atlas Combat/Combatify Started being developed",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "First Atlas Combat Release",
+            "date": [
+                8,
+                8,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "TenCommands Cheating Scandal",
+            "date": [
+                9,
+                11,
+                2022
+            ],
+            "description": "TenCommands used command blocks to give himself blatant hacks and blamed it on ping despite obvious video evidence he was cheating.",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "New CTS Tier List opens",
+            "date": [
+                11,
+                19,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Nexia starts being produced",
+            "date": [
+                12,
+                22,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Combat Reforged 2.0 announced",
+            "date": [
+                12,
+                27,
+                2022
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Enhanced SMP shuts down",
+            "date": [
+                1,
+                27,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "CTS UHC event",
+            "date": [
+                3,
+                4,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "TenCommands banned for Doxxing",
+            "date": [
+                4,
+                2,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "FifeMC re-opens",
+            "date": [
+                6,
+                8,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Lileblomst/Asimoa/1Spring Drama",
+            "date": [
+                6,
+                12,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Soynte Drama",
+            "date": [
+                9,
+                28,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "CTS Feedback Post becomes the most popular",
+            "date": [
+                10,
+                5,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Nexia SMP Opens",
+            "date": [
+                10,
+                23,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Intel Edits uploads CTS Video",
+            "date": [
+                11,
+                23,
+                2023
+            ],
+            "description": "Finally",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Nexia SMP shut down",
+            "date": [
+                12,
+                26,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Venade/Combat Reforged Shut Down officially",
+            "date": [
+                12,
+                27,
+                2023
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        },
+        {
+            "name": "Nexia Shut Down",
+            "date": [
+                1,
+                25,
+                2024
+            ],
+            "description": "",
+            "images": [
+                ""
+            ]
+        }
     ]
 }
