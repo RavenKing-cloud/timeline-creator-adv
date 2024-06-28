@@ -1,11 +1,11 @@
 import sys
 import json
 import os
+import datetime
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
                              QAction, QToolBar, QInputDialog, QDateEdit, QDialog, QVBoxLayout, QDialogButtonBox, 
                              QComboBox, QTextEdit, QFormLayout)
 from PyQt5.QtGui import QPixmap, QIcon
-import datetime
 from src.render import render_timeline
 
 
