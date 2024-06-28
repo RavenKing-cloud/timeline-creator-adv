@@ -61,3 +61,6 @@ Please note that the order you enter them into the json file does matter! You sh
     - [x] modify logic to sort and overwrite json data
 - [ ] hover on event to view tooltip
   - [ ] pop out display with image and live edit*
+- [ ] modify render code to prevent overlapping
+  - [ ] event overlap
+  - [ ] year text overlap
