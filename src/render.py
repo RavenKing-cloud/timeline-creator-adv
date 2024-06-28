@@ -1,4 +1,3 @@
-import sys
 import os
 import json
 from PIL import Image, ImageDraw, ImageFont

@@ -1,0 +1,37 @@
+{
+    "timeline_name": "test2",
+    "start_date": [
+        6,
+        21,
+        2001
+    ],
+    "end_date": [
+        6,
+        27,
+        2015
+    ],
+    "events": [
+        {
+            "name": "test event",
+            "date": [
+                6,
+                27,
+                2002
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "test image",
+            "date": [
+                7,
+                27,
+                2003
+            ],
+            "description": "test",
+            "images": [
+                "images\\test.png"
+            ]
+        }
+    ]
+}
