@@ -3,9 +3,8 @@ import json
 import os
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
                              QAction, QToolBar, QInputDialog, QDateEdit, QDialog, QVBoxLayout, QDialogButtonBox, 
-                             QComboBox, QTextEdit, QPushButton, QHBoxLayout, QFormLayout, QLineEdit)
+                             QComboBox, QTextEdit, QFormLayout)
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import QThread, pyqtSignal
 import datetime
 from src.render import render_timeline
 
