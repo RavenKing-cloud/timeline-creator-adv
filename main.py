@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QL
 from PyQt5.QtGui import QPixmap, QIcon
 import datetime
 from src.render import render_timeline
+from src.sort import sort_json
 
 
 class SingleLineListJsonEncoder(json.JSONEncoder):
@@ -204,6 +205,7 @@ class MainWindow(QMainWindow):
                                     json.dump(json_data, json_file, indent=4, cls=SingleLineListJsonEncoder)
 
                                 print(f"Event '{event_name}' added to {self.current_file_path}")
+                                sort_json(self.current_file_path)
                                 self.render_timeline_from_file(self.current_file_path)
                                 self.load_events_into_selector(self.current_file_path)
                             else:
