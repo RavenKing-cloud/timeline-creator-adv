@@ -9,13 +9,12 @@ from PyQt5.QtGui import QPixmap, QIcon
 from src.render import render_timeline
 from src.sort import sort_json
 
-
-class SingleLineListJsonEncoder(json.JSONEncoder):
-    def encode(self, obj):
-        if isinstance(obj, list):
-            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
-        return super(SingleLineListJsonEncoder, self).encode(obj)
-
+"""Not Currently used or working: vvv"""
+#class SingleLineListJsonEncoder(json.JSONEncoder):
+#    def encode(self, obj):
+#        if isinstance(obj, list):
+#            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
+#        return super(SingleLineListJsonEncoder, self).encode(obj)
 
 class DateDialog(QDialog):
     def __init__(self, title, parent=None):
@@ -162,7 +161,7 @@ class MainWindow(QMainWindow):
 
                         try:
                             with open(file_path, 'w') as json_file:
-                                json.dump(json_data, json_file, indent=4, cls=SingleLineListJsonEncoder)
+                                json.dump(json_data, json_file, indent=4)
                             self.current_file_path = file_path
                             print(f"New JSON file created: {file_path}")
                             self.render_timeline_from_file(file_path)
@@ -202,7 +201,7 @@ class MainWindow(QMainWindow):
                                 json_data["events"].append(new_event)
 
                                 with open(self.current_file_path, 'w') as json_file:
-                                    json.dump(json_data, json_file, indent=4, cls=SingleLineListJsonEncoder)
+                                    json.dump(json_data, json_file, indent=4)
 
                                 print(f"Event '{event_name}' added to {self.current_file_path}")
                                 sort_json(self.current_file_path)
