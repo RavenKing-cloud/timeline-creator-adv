@@ -59,6 +59,7 @@ Please note that the order you enter them into the json file does matter! You sh
   - [x] create timeline file
   - [x] add event to timeline
     - [x] modify logic to sort and overwrite json data
+- [ ] integrate sort logic to main
 - [ ] hover on event to view tooltip
   - [ ] pop out display with image and (live edit*)
       - [ ] delete button with confirmation
