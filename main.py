@@ -5,7 +5,8 @@ import datetime
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
                              QAction, QToolBar, QInputDialog, QDateEdit, QDialog, QVBoxLayout, QDialogButtonBox, 
                              QComboBox, QTextEdit, QFormLayout)
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
+from PyQt5.QtCore import Qt
 from src.render import render_timeline
 from src.sort import sort_json
 
@@ -100,6 +101,12 @@ class MainWindow(QMainWindow):
         add_event_action.triggered.connect(self.add_event_to_timeline)
         toolbar.addAction(add_event_action)
 
+        # Add dark mode toggle action
+        self.dark_mode = False
+        dark_mode_action = QAction(QIcon.fromTheme("weather-night"), "Toggle Dark Mode", self)
+        dark_mode_action.triggered.connect(self.toggle_dark_mode)
+        toolbar.addAction(dark_mode_action)
+
         # Layout
         layout = QVBoxLayout()
 
@@ -122,6 +129,33 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
+
+        # Set initial color scheme
+        self.toggle_dark_mode()
+
+    def toggle_dark_mode(self):
+        self.dark_mode = not self.dark_mode
+        if self.dark_mode:
+            app.setStyle("Fusion")
+            palette = QPalette()
+            palette.setColor(QPalette.Window, QColor(53, 53, 53))
+            palette.setColor(QPalette.WindowText, Qt.white)
+            palette.setColor(QPalette.Base, QColor(25, 25, 25))
+            palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+            palette.setColor(QPalette.ToolTipBase, Qt.white)
+            palette.setColor(QPalette.ToolTipText, Qt.white)
+            palette.setColor(QPalette.Text, Qt.white)
+            palette.setColor(QPalette.Button, QColor(53, 53, 53))
+            palette.setColor(QPalette.ButtonText, Qt.white)
+            palette.setColor(QPalette.BrightText, Qt.red)
+            palette.setColor(QPalette.Link, QColor(42, 130, 218))
+            palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+            palette.setColor(QPalette.HighlightedText, Qt.black)
+            app.setPalette(palette)
+        else:
+            app.setStyle("Fusion")
+            palette = QPalette()
+            app.setPalette(palette)
 
     def open_file_dialog(self):
         options = QFileDialog.Options()
