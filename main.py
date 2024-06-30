@@ -1,292 +1,94 @@
-import sys
-import json
 import os
-import datetime
-from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
-                             QAction, QToolBar, QInputDialog, QDateEdit, QDialog, QVBoxLayout, QDialogButtonBox, 
-                             QComboBox, QTextEdit, QFormLayout)
-from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
-from PyQt5.QtCore import Qt
-from src.render import render_timeline
-from src.sort import sort_json
+import json
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
 
-"""Not Currently used or working: vvv"""
-#class SingleLineListJsonEncoder(json.JSONEncoder):
-#    def encode(self, obj):
-#        if isinstance(obj, list):
-#            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
-#        return super(SingleLineListJsonEncoder, self).encode(obj)
+# Function to load JSON from a given file path
+def load_json(file_path):
+    with open(file_path) as f:
+        return json.load(f)
 
-class DateDialog(QDialog):
-    def __init__(self, title, parent=None):
-        super(DateDialog, self).__init__(parent)
-        self.setWindowTitle(title)
+# Function to convert a date into a numerical representation
+def datenum(date: list):
+    return int(np.floor((date[0] / 12 + date[1] / 365 + date[2]) * 700))
 
-        self.date_edit = QDateEdit(self)
-        self.date_edit.setCalendarPopup(True)
-        self.date_edit.setDate(datetime.date.today())
+# Function to render the timeline image
+def render_timeline(json_file_path, darkmode: bool):
+    # Load JSON data from the specified file path
+    timeline_data = load_json(json_file_path)
 
-        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
-        self.button_box.accepted.connect(self.accept)
-        self.button_box.rejected.connect(self.reject)
+    # Set the beginning and end of the timeline
+    start_date = datenum([timeline_data['start_date'][0] - 4, timeline_data['start_date'][1], timeline_data['start_date'][2]])
+    end_date = datenum([timeline_data['end_date'][0] + 4, timeline_data['end_date'][1], timeline_data['end_date'][2]])
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.date_edit)
-        layout.addWidget(self.button_box)
-        self.setLayout(layout)
+    # Calculate the length of the timeline
+    timeline_length = end_date - start_date
 
-    def get_date(self):
-        if self.exec_() == QDialog.Accepted:
-            return self.date_edit.date().toPyDate()
+    # Create the base image for the timeline
+    if darkmode:
+        img = Image.new(mode="RGB", size=(timeline_length, 720), color=(53, 53, 53))
+        draw = ImageDraw.Draw(img)
+        draw.line([(0, 360), (timeline_length, 360)], fill=(255, 255, 255), width=4)  # Middle line
+    else:
+        img = Image.new(mode="RGB", size=(timeline_length, 720), color=(255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        draw.line([(0, 360), (timeline_length, 360)], fill=(0, 0, 0), width=4)  # Middle line
+
+    # Use a relative path to the font file
+    font_path = os.path.join(os.path.dirname(__file__), '..', 'font', 'font.ttf')
+    font = ImageFont.truetype(font_path, 16)
+
+    if darkmode:
+        color = (255,255,255)
+    else:
+        color = (0,0,0)
+
+    # Show events on the timeline
+    event_num = 0
+    for event in timeline_data['events']:
+        event_num += 1
+        pos = datenum(event['date']) - start_date  # Get event's position on the timeline
+        name = event['name']  # Get name of the event
+
+        # Prepare for text rendering
+        text_img = Image.new('RGBA', (400, 200), (255, 255, 255, 0))  # Adjusted size for better accommodation of rotated text
+        text_draw = ImageDraw.Draw(text_img)
+        text_size = text_draw.textbbox((0, 0), name, font=font)
+        text_draw.text((0, 0), name, color, font=font)
+
+        if event_num % 2 == 1:
+            draw.line([(pos, 360), (pos, 340), (pos + 20, 320)], fill=color, width=2)
+            rotated_text_img = text_img.rotate(45, expand=True)
+            x = pos + 232 - rotated_text_img.width // 2
+            y = 244 - rotated_text_img.height // 2
         else:
-            return None
+            draw.line([(pos, 360), (pos, 380), (pos + 20, 400)], fill=color, width=2)
+            rotated_text_img = text_img.rotate(-45, expand=True)
+            x = pos + 97 - rotated_text_img.width // 2
+            y = 612 - rotated_text_img.height // 2
 
+        img.paste(rotated_text_img, (x, y), rotated_text_img)
 
-class EventWindow(QDialog):
-    def __init__(self, event_data, parent=None):
-        super(EventWindow, self).__init__(parent)
-        self.setWindowTitle(event_data['name'])
-        self.setGeometry(200, 200, 400, 300)
+    # Loop through all the years the timeline covers
+    for i in range(timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1):
+        pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the year
+        draw.line([(pos, 340), (pos, 380)], fill=color, width=4)  # Draw line through the main line
+        draw.text((pos - 19, 326), str(timeline_data['start_date'][2] + i), color, font=font)  # Render year
 
-        layout = QFormLayout()
-        self.setLayout(layout)
+    # Loop through all the months the timeline covers
+    for i in range((timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1)*12 - 1):
+        pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the month
+        draw.line([(pos // 12 - 4, 355), (pos // 12 - 4, 365)], fill=color, width=4)  # Draw line through the main line
 
-        self.name_label = QLabel("Event Name:")
-        self.name_text = QLabel(event_data['name'])
-        layout.addRow(self.name_label, self.name_text)
+    # Draw the top right text
+    font_large = ImageFont.truetype(font_path, 36)
+    draw.text((10, 10), timeline_data['timeline_name'], color, font=font_large, align='left', anchor='lt')
 
-        self.date_label = QLabel("Event Date:")
-        event_date = datetime.date(event_data['date'][2], event_data['date'][0], event_data['date'][1])
-        self.date_text = QLabel(event_date.strftime("%B %d, %Y"))
-        layout.addRow(self.date_label, self.date_text)
+    # Save the image with the same name as the JSON file
+    json_file_name = os.path.basename(json_file_path)
+    base_name = os.path.splitext(json_file_name)[0]
+    img_path = os.path.join(os.path.dirname(__file__), '..', 'export', f'{base_name}.png')
+    img.save(img_path)
 
-        self.description_label = QLabel("Description:")
-        self.description_text = QTextEdit(event_data['description'])
-        self.description_text.setReadOnly(True)
-        layout.addRow(self.description_label, self.description_text)
-
-        if event_data['images']:
-            self.image_label = QLabel("Image:")
-            image_path = event_data['images'][0]  # Assuming one image per event for simplicity
-            pixmap = QPixmap(image_path)
-            self.image_view = QLabel()
-            self.image_view.setPixmap(pixmap.scaled(300, 200, aspectRatioMode=1))
-            layout.addRow(self.image_label, self.image_view)
-
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-        self.current_file_path = None
-
-    def initUI(self):
-        self.setWindowTitle('ONE-Liner - Timeline Editor')
-        self.setGeometry(100, 100, 1400, 820)
-
-        # Create a top toolbar
-        toolbar = QToolBar("Main Toolbar")
-        self.addToolBar(toolbar)
-
-        # Add actions to the toolbar
-        open_action = QAction(QIcon.fromTheme("document-open"), "Open Timeline", self)
-        open_action.triggered.connect(self.open_file_dialog)
-        toolbar.addAction(open_action)
-
-        create_action = QAction(QIcon.fromTheme("document-new"), "Create New Timeline", self)
-        create_action.triggered.connect(self.create_timeline)
-        toolbar.addAction(create_action)
-
-        add_event_action = QAction(QIcon.fromTheme("list-add"), "Add Event to Timeline", self)
-        add_event_action.triggered.connect(self.add_event_to_timeline)
-        toolbar.addAction(add_event_action)
-
-        # Add dark mode toggle action
-        self.dark_mode = False
-        dark_mode_action = QAction(QIcon.fromTheme("weather-night"), "Toggle Dark Mode", self)
-        dark_mode_action.triggered.connect(self.toggle_dark_mode)
-        toolbar.addAction(dark_mode_action)
-
-        # Layout
-        layout = QVBoxLayout()
-
-        # Scroll Area
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-
-        # QLabel to display the rendered image
-        self.lbl_image = QLabel()
-        scroll_area.setWidget(self.lbl_image)
-
-        layout.addWidget(scroll_area)
-
-        # ComboBox for event selection
-        self.event_selector = QComboBox()
-        self.event_selector.currentIndexChanged.connect(self.display_event)
-        layout.addWidget(self.event_selector)
-
-        # Create a central widget and set the layout
-        central_widget = QWidget()
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
-
-        # Set initial color scheme
-        self.toggle_dark_mode()
-
-    def toggle_dark_mode(self):
-        self.dark_mode = not self.dark_mode
-        if self.dark_mode:
-            app.setStyle("Fusion")
-            palette = QPalette()
-            palette.setColor(QPalette.Window, QColor(53, 53, 53))
-            palette.setColor(QPalette.WindowText, Qt.white)
-            palette.setColor(QPalette.Base, QColor(25, 25, 25))
-            palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-            palette.setColor(QPalette.ToolTipBase, Qt.white)
-            palette.setColor(QPalette.ToolTipText, Qt.white)
-            palette.setColor(QPalette.Text, Qt.white)
-            palette.setColor(QPalette.Button, QColor(53, 53, 53))
-            palette.setColor(QPalette.ButtonText, Qt.white)
-            palette.setColor(QPalette.BrightText, Qt.red)
-            palette.setColor(QPalette.Link, QColor(42, 130, 218))
-            palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
-            palette.setColor(QPalette.HighlightedText, Qt.black)
-            app.setPalette(palette)
-        else:
-            app.setStyle("Fusion")
-            palette = QPalette()
-            app.setPalette(palette)
-
-    def open_file_dialog(self):
-        options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getOpenFileName(self, "Open JSON File", "", "JSON Files (*.json)", options=options)
-
-        if file_path:
-            self.current_file_path = file_path
-            self.render_timeline_from_file(file_path)
-            self.load_events_into_selector(file_path)
-
-    def render_timeline_from_file(self, file_path):
-        try:
-            img_path = render_timeline(file_path)
-            pixmap = QPixmap(img_path)
-            self.lbl_image.setPixmap(pixmap)
-            self.lbl_image.setScaledContents(False)
-        except Exception as e:
-            print(f"Error rendering timeline: {e}")
-
-    def create_timeline(self):
-        options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getSaveFileName(self, "Create New JSON File", "", "JSON Files (*.json)", options=options)
-
-        if file_path:
-            timeline_name, ok = QInputDialog.getText(self, "Timeline Name", "Enter the timeline name:")
-            if ok and timeline_name:
-                start_date = self.get_date("Start Date")
-                if start_date:
-                    end_date = self.get_date("End Date")
-                    if end_date:
-                        json_data = {
-                            "timeline_name": timeline_name,
-                            "start_date": [start_date.month, start_date.day, start_date.year],
-                            "end_date": [end_date.month, end_date.day, end_date.year],
-                            "events": []
-                        }
-
-                        try:
-                            with open(file_path, 'w') as json_file:
-                                json.dump(json_data, json_file, indent=4)
-                            self.current_file_path = file_path
-                            print(f"New JSON file created: {file_path}")
-                            self.render_timeline_from_file(file_path)
-                        except Exception as e:
-                            print(f"Error creating JSON file: {e}")
-                    else:
-                        print("Invalid end date.")
-                else:
-                    print("Invalid start date.")
-            else:
-                print("Timeline name cannot be empty.")
-
-    def get_date(self, title):
-        date_dialog = DateDialog(title, self)
-        return date_dialog.get_date()
-
-    def add_event_to_timeline(self):
-        if self.current_file_path:
-            try:
-                with open(self.current_file_path, 'r') as json_file:
-                    json_data = json.load(json_file)
-
-                event_name, ok = QInputDialog.getText(self, "Add Event", "Enter the event name:")
-                if ok and event_name:
-                    event_date = self.get_date("Select Event Date")
-                    if event_date:
-                        description, ok = QInputDialog.getText(self, "Event Description", "Enter the event description:")
-                        if ok:
-                            image_file = self.get_image_file()
-                            if image_file:
-                                new_event = {
-                                    "name": event_name,
-                                    "date": [event_date.month, event_date.day, event_date.year],
-                                    "description": description,
-                                    "images": [image_file]
-                                }
-                                json_data["events"].append(new_event)
-
-                                with open(self.current_file_path, 'w') as json_file:
-                                    json.dump(json_data, json_file, indent=4)
-
-                                print(f"Event '{event_name}' added to {self.current_file_path}")
-                                sort_json(self.current_file_path)
-                                self.render_timeline_from_file(self.current_file_path)
-                                self.load_events_into_selector(self.current_file_path)
-                            else:
-                                print("No image selected.")
-                        else:
-                            print("Event description cannot be empty.")
-                    else:
-                        print("Invalid event date.")
-                else:
-                    print("Event name cannot be empty.")
-            except Exception as e:
-                print(f"Error adding event to JSON file: {e}")
-        else:
-            print("No file is currently open.")
-
-    def get_image_file(self):
-        image_dir = os.path.join(os.path.dirname(__file__), '..', 'images')
-        if not os.path.exists(image_dir):
-            os.makedirs(image_dir)
-
-        options = QFileDialog.Options()
-        file_path, _ = QFileDialog.getOpenFileName(self, "Select Image File", image_dir, "Image Files (*.png *.jpg *.jpeg *.bmp)", options=options)
-        if file_path:
-            return os.path.relpath(file_path, os.path.dirname(__file__))
-        else:
-            return None
-
-    def load_events_into_selector(self, file_path):
-        self.event_selector.clear()
-        try:
-            with open(file_path, 'r') as json_file:
-                json_data = json.load(json_file)
-                for event in json_data.get('events', []):
-                    event_date = datetime.date(event['date'][2], event['date'][0], event['date'][1])
-                    event_text = f"{event['name']} ({event_date.strftime('%B %d, %Y')})"
-                    self.event_selector.addItem(event_text, event)
-        except Exception as e:
-            print(f"Error loading events: {e}")
-
-    def display_event(self):
-        event_data = self.event_selector.currentData()
-        if event_data:
-            self.event_window = EventWindow(event_data)
-            self.event_window.show()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    mainWindow = MainWindow()
-    mainWindow.show()
-    sys.exit(app.exec_())
+    # Return the path to the saved image
+    return img_path
