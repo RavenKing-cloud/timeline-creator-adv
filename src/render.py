@@ -13,7 +13,7 @@ def datenum(date: list):
     return int(np.floor((date[0] / 12 + date[1] / 365 + date[2]) * 700))
 
 # Function to render the timeline image
-def render_timeline(json_file_path):
+def render_timeline(json_file_path, darkmode: bool):
     # Load JSON data from the specified file path
     timeline_data = load_json(json_file_path)
 
@@ -25,13 +25,23 @@ def render_timeline(json_file_path):
     timeline_length = end_date - start_date
 
     # Create the base image for the timeline
-    img = Image.new(mode="RGB", size=(timeline_length, 720), color=(255, 255, 255))
-    draw = ImageDraw.Draw(img)
-    draw.line([(0, 360), (timeline_length, 360)], fill=(0, 0, 0), width=4)  # Middle line
+    if darkmode:
+        img = Image.new(mode="RGB", size=(timeline_length, 720), color=(53, 53, 53))
+        draw = ImageDraw.Draw(img)
+        draw.line([(0, 360), (timeline_length, 360)], fill=(255, 255, 255), width=4)  # Middle line
+    else:
+        img = Image.new(mode="RGB", size=(timeline_length, 720), color=(255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        draw.line([(0, 360), (timeline_length, 360)], fill=(0, 0, 0), width=4)  # Middle line
 
     # Use a relative path to the font file
     font_path = os.path.join(os.path.dirname(__file__), '..', 'font', 'font.ttf')
     font = ImageFont.truetype(font_path, 16)
+
+    if darkmode:
+        color = (255,255,255)
+    else:
+        color = (0,0,0)
 
     # Show events on the timeline
     event_num = 0
@@ -44,15 +54,15 @@ def render_timeline(json_file_path):
         text_img = Image.new('RGBA', (400, 200), (255, 255, 255, 0))  # Adjusted size for better accommodation of rotated text
         text_draw = ImageDraw.Draw(text_img)
         text_size = text_draw.textbbox((0, 0), name, font=font)
-        text_draw.text((0, 0), name, (0, 0, 0), font=font)
+        text_draw.text((0, 0), name, color, font=font)
 
         if event_num % 2 == 1:
-            draw.line([(pos, 360), (pos, 340), (pos + 20, 320)], fill=(0, 0, 0), width=2)
+            draw.line([(pos, 360), (pos, 340), (pos + 20, 320)], fill=color, width=2)
             rotated_text_img = text_img.rotate(45, expand=True)
             x = pos + 232 - rotated_text_img.width // 2
             y = 244 - rotated_text_img.height // 2
         else:
-            draw.line([(pos, 360), (pos, 380), (pos + 20, 400)], fill=(0, 0, 0), width=2)
+            draw.line([(pos, 360), (pos, 380), (pos + 20, 400)], fill=color, width=2)
             rotated_text_img = text_img.rotate(-45, expand=True)
             x = pos + 97 - rotated_text_img.width // 2
             y = 612 - rotated_text_img.height // 2
@@ -62,17 +72,17 @@ def render_timeline(json_file_path):
     # Loop through all the years the timeline covers
     for i in range(timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1):
         pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the year
-        draw.line([(pos, 340), (pos, 380)], fill=(0, 0, 0), width=4)  # Draw line through the main line
-        draw.text((pos - 19, 326), str(timeline_data['start_date'][2] + i), (0, 0, 0), font=font)  # Render year
+        draw.line([(pos, 340), (pos, 380)], fill=color, width=4)  # Draw line through the main line
+        draw.text((pos - 19, 326), str(timeline_data['start_date'][2] + i), color, font=font)  # Render year
 
     # Loop through all the months the timeline covers
     for i in range((timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1)*12 - 1):
         pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the month
-        draw.line([(pos // 12 - 4, 355), (pos // 12 - 4, 365)], fill=(0, 0, 0), width=4)  # Draw line through the main line
+        draw.line([(pos // 12 - 4, 355), (pos // 12 - 4, 365)], fill=color, width=4)  # Draw line through the main line
 
     # Draw the top right text
     font_large = ImageFont.truetype(font_path, 36)
-    draw.text((10, 10), timeline_data['timeline_name'], (0, 0, 0), font=font_large, align='left', anchor='lt')
+    draw.text((10, 10), timeline_data['timeline_name'], color, font=font_large, align='left', anchor='lt')
 
     # Save the image with the same name as the JSON file
     json_file_name = os.path.basename(json_file_path)
