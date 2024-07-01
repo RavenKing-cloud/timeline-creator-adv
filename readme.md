@@ -67,3 +67,14 @@ Please note that the order you enter them into the json file does matter! You sh
 - [ ] modify render code to prevent overlapping
   - [ ] event overlap
   - [ ] year text overlap
+
+### Test Cases
+
+- [ ] darkmode
+  - [ ] load json with darmode active
+  - [ ] activate darkmode with json pre-loaded
+
+### Bugs
+
+- [ ] does not update entire main gui on save through event window
+- [ ] auto event window opening on render
