@@ -12,15 +12,15 @@
     ],
     "events": [
         {
-            "name": "test event",
+            "name": "smashkey",
             "date": [
                 6,
                 27,
                 2002
             ],
-            "description": "",
+            "description": "hello",
             "images": [
-                "D:/root/dev/code/discord/timeline/timeline-creator-adv/images/test.png"
+                "images\\test.png"
             ]
         },
         {
@@ -30,7 +30,7 @@
                 27,
                 2003
             ],
-            "description": "test",
+            "description": "hellop",
             "images": [
                 "images\\test.png"
             ]
