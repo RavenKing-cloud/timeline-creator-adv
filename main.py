@@ -3,12 +3,13 @@ import json
 import os
 import datetime
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
-                             QAction, QToolBar, QInputDialog, QDateEdit, QDialog, QVBoxLayout, QDialogButtonBox, 
-                             QComboBox, QTextEdit, QFormLayout)
+                             QAction, QToolBar, QInputDialog, QVBoxLayout, QComboBox)
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
 from PyQt5.QtCore import Qt
 from src.render import render_timeline
 from src.sort import sort_json
+from src.event_gui import EventWindow
+from src.date_select import DateDialog
 
 """Not Currently used or working: vvv"""
 #class SingleLineListJsonEncoder(json.JSONEncoder):
@@ -16,63 +17,6 @@ from src.sort import sort_json
 #        if isinstance(obj, list):
 #            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
 #        return super(SingleLineListJsonEncoder, self).encode(obj)
-
-class DateDialog(QDialog):
-    def __init__(self, title, parent=None):
-        super(DateDialog, self).__init__(parent)
-        self.setWindowTitle(title)
-
-        self.date_edit = QDateEdit(self)
-        self.date_edit.setCalendarPopup(True)
-        self.date_edit.setDate(datetime.date.today())
-
-        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel, self)
-        self.button_box.accepted.connect(self.accept)
-        self.button_box.rejected.connect(self.reject)
-
-        layout = QVBoxLayout()
-        layout.addWidget(self.date_edit)
-        layout.addWidget(self.button_box)
-        self.setLayout(layout)
-
-    def get_date(self):
-        if self.exec_() == QDialog.Accepted:
-            return self.date_edit.date().toPyDate()
-        else:
-            return None
-
-
-class EventWindow(QDialog):
-    def __init__(self, event_data, parent=None):
-        super(EventWindow, self).__init__(parent)
-        self.setWindowTitle(event_data['name'])
-        self.setGeometry(200, 200, 400, 300)
-
-        layout = QFormLayout()
-        self.setLayout(layout)
-
-        self.name_label = QLabel("Event Name:")
-        self.name_text = QLabel(event_data['name'])
-        layout.addRow(self.name_label, self.name_text)
-
-        self.date_label = QLabel("Event Date:")
-        event_date = datetime.date(event_data['date'][2], event_data['date'][0], event_data['date'][1])
-        self.date_text = QLabel(event_date.strftime("%B %d, %Y"))
-        layout.addRow(self.date_label, self.date_text)
-
-        self.description_label = QLabel("Description:")
-        self.description_text = QTextEdit(event_data['description'])
-        self.description_text.setReadOnly(True)
-        layout.addRow(self.description_label, self.description_text)
-
-        if event_data['images']:
-            self.image_label = QLabel("Image:")
-            image_path = event_data['images'][0]  # Assuming one image per event for simplicity
-            pixmap = QPixmap(image_path)
-            self.image_view = QLabel()
-            self.image_view.setPixmap(pixmap.scaled(300, 200, aspectRatioMode=1))
-            layout.addRow(self.image_label, self.image_view)
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -279,9 +223,8 @@ class MainWindow(QMainWindow):
     def display_event(self):
         event_data = self.event_selector.currentData()
         if event_data:
-            self.event_window = EventWindow(event_data)
+            self.event_window = EventWindow(event_data, self.current_file_path)
             self.event_window.show()
-    
 
 
 if __name__ == '__main__':
