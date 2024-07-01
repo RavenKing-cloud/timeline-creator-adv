@@ -3,20 +3,156 @@ import json
 import os
 import datetime
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
-                             QAction, QToolBar, QInputDialog, QVBoxLayout, QComboBox)
+                             QAction, QToolBar, QInputDialog, QVBoxLayout, QComboBox, QLineEdit, QDateEdit, 
+                             QPushButton, QFileDialog, QFormLayout, QLabel, QDialog, QTextEdit, QMessageBox)
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
 from PyQt5.QtCore import Qt
 from src.render import render_timeline
 from src.sort import sort_json
-from src.event_gui import EventWindow
 from src.date_select import DateDialog
 
-"""Not Currently used or working: vvv"""
-#class SingleLineListJsonEncoder(json.JSONEncoder):
-#    def encode(self, obj):
-#        if isinstance(obj, list):
-#            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
-#        return super(SingleLineListJsonEncoder, self).encode(obj)
+
+class EventWindow(QDialog):
+    def __init__(self, event_data, file_path, parent=None):
+        super(EventWindow, self).__init__(parent)
+        self.setWindowTitle(event_data['name'])
+        self.setGeometry(200, 200, 400, 300)
+        self.event_data = event_data
+        self.file_path = file_path
+        self.modified = False  # Track if changes are made
+
+        layout = QFormLayout()
+        self.setLayout(layout)
+
+        self.name_label = QLabel("Event Name:")
+        self.name_text = QLineEdit(event_data['name'])
+        layout.addRow(self.name_label, self.name_text)
+
+        self.date_label = QLabel("Event Date:")
+        self.date_text = QDateEdit(self)
+        event_date = datetime.date(event_data['date'][2], event_data['date'][0], event_data['date'][1])
+        self.date_text.setDate(event_date)
+        layout.addRow(self.date_label, self.date_text)
+
+        self.description_label = QLabel("Description:")
+        self.description_text = QTextEdit(event_data['description'])
+        layout.addRow(self.description_label, self.description_text)
+
+        self.image_label = QLabel("Image:")
+        self.image_button = QPushButton("Add Image" if not event_data['images'] else "Change Image")
+        self.image_button.clicked.connect(self.change_image)
+        layout.addRow(self.image_label, self.image_button)
+
+        self.image_view = QLabel()
+        layout.addRow(self.image_view)
+
+        if event_data['images']:
+            image_path = event_data['images'][0]
+            pixmap = QPixmap(image_path)
+            self.image_view.setPixmap(pixmap.scaled(300, 200, aspectRatioMode=Qt.KeepAspectRatio))
+        else:
+            self.image_view.setText("No image available")
+
+        # Save button
+        self.save_button = QPushButton("Save")
+        self.save_button.clicked.connect(self.save_event)
+        layout.addRow(self.save_button)
+
+        # Delete button
+        self.delete_button = QPushButton("Delete Event")
+        self.delete_button.clicked.connect(self.delete_event)
+        layout.addRow(self.delete_button)
+
+    def save_event(self):
+        # Update event_data with current values from UI
+        new_name = self.name_text.text()
+        new_date = [
+            self.date_text.date().month(),
+            self.date_text.date().day(),
+            self.date_text.date().year()
+        ]
+        new_description = self.description_text.toPlainText()
+
+        try:
+            # Read existing JSON data
+            with open(self.file_path, 'r') as json_file:
+                json_data = json.load(json_file)
+
+            # Find and update the specific event
+            for event in json_data['events']:
+                if event['name'] == self.event_data['name']:
+                    event['name'] = new_name
+                    event['date'] = new_date
+                    event['description'] = new_description
+                    # Preserve existing images paths (relative)
+                    event['images'] = self.event_data['images']
+                    break
+
+            # Write updated JSON data back to the file
+            with open(self.file_path, 'w') as json_file:
+                json.dump(json_data, json_file, indent=4)
+
+            self.modified = False  # Reset modified flag after saving
+
+            # Show confirmation message
+            QMessageBox.information(self, 'Save Successful', 'Event data has been successfully saved.')
+
+            # TODO: Fix the reloading of GUI
+            # Reload events into selector in MainWindow
+            if self.parent() and isinstance(self.parent(), MainWindow):
+                self.parent().render_timeline(self.file_path)
+                self.parent().load_events_into_selector(self.file_path)
+
+        except Exception as e:
+            print(f"Error saving event data: {e}")
+
+    def change_image(self):
+        # Change or add image logic
+        image_dir = os.path.join(os.path.dirname(__file__), 'images')
+        if not os.path.exists(image_dir):
+            os.makedirs(image_dir)
+
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select Image File", image_dir, "Image Files (*.png *.jpg *.jpeg *.bmp)", options=options)
+        
+        if file_path and os.path.commonpath([image_dir, file_path]) == image_dir:
+            # Save relative path in event_data
+            rel_path = os.path.relpath(file_path, os.path.dirname(__file__))
+            self.event_data['images'] = [rel_path]
+
+            # Display image in image_view
+            pixmap = QPixmap(file_path)
+            self.image_view.setPixmap(pixmap.scaled(300, 200, aspectRatioMode=Qt.KeepAspectRatio))
+        else:
+            print("Selected file is not within the allowed directory.")
+
+    def delete_event(self):
+        confirm = QMessageBox.question(self, 'Delete Event', 'Are you sure you want to delete this event?',
+                                       QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            try:
+                with open(self.file_path, 'r') as json_file:
+                    json_data = json.load(json_file)
+
+                json_data['events'] = [event for event in json_data['events'] if event['name'] != self.event_data['name']]
+
+                with open(self.file_path, 'w') as json_file:
+                    json.dump(json_data, json_file, indent=4)
+
+                self.accept()  # Close the dialog after deletion
+            except Exception as e:
+                print(f"Error deleting event: {e}")
+
+    def reject(self):
+        # Override reject to handle cancel/close button
+        if self.modified:
+            confirm = QMessageBox.question(self, 'Discard Changes', 'Discard changes made to this event?',
+                                           QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if confirm == QMessageBox.Yes:
+                super(EventWindow, self).reject()
+        else:
+            super(EventWindow, self).reject()
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -150,10 +286,6 @@ class MainWindow(QMainWindow):
             else:
                 print("Timeline name cannot be empty.")
 
-    def get_date(self, title):
-        date_dialog = DateDialog(title, self)
-        return date_dialog.get_date()
-
     def add_event_to_timeline(self):
         if self.current_file_path:
             try:
@@ -224,8 +356,21 @@ class MainWindow(QMainWindow):
         event_data = self.event_selector.currentData()
         if event_data:
             self.event_window = EventWindow(event_data, self.current_file_path)
-            self.event_window.show()
+            result = self.event_window.exec_()
+            if result == QDialog.Accepted:
+                self.load_events_into_selector(self.current_file_path)
+                self.render_timeline_from_file(self.current_file_path)
 
+    def get_date(self, title):
+        date_dialog = DateDialog(title, self)
+        return date_dialog.get_date()
+
+"""Not Currently used or working: vvv"""
+#class SingleLineListJsonEncoder(json.JSONEncoder):
+#    def encode(self, obj):
+#        if isinstance(obj, list):
+#            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
+#        return super(SingleLineListJsonEncoder, self).encode(obj)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

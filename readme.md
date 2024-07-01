@@ -60,9 +60,10 @@ Please note that the order you enter them into the json file does matter! You sh
   - [x] add event to timeline
     - [x] modify logic to sort and overwrite json data
 - [x] integrate sort logic to main
-- [ ] hover on event to view tooltip
-  - [ ] pop out display with image and (live edit*)
-      - [ ] delete button with confirmation
+- [x] select event from toolbar to view tooltip
+  - [x] pop out display with image and (live edit*)
+    - [x] delete button with confirmation
+    - [ ] make the display update and reload when event is edited and saved
 - [ ] modify render code to prevent overlapping
   - [ ] event overlap
   - [ ] year text overlap
