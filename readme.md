@@ -64,7 +64,7 @@ Please note that the order you enter them into the json file does matter! You sh
 - [x] select event from toolbar to view tooltip
   - [x] pop out display with image and (live edit*)
     - [x] delete button with confirmation
-    - [ ] make the display update and reload when event is edited and saved
+    - [x] make the display update and reload when event is edited and saved
 - [ ] modify render code to prevent overlapping
   - [ ] event overlap
   - [ ] year text overlap
@@ -74,8 +74,3 @@ Please note that the order you enter them into the json file does matter! You sh
 - [ ] darkmode
   - [ ] load json with darmode active
   - [ ] activate darkmode with json pre-loaded
-
-### Bugs
-
-- [ ] does not update entire main gui on save through event window
-- [ ] auto event window opening on render
