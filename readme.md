@@ -68,6 +68,11 @@ Please note that the order you enter them into the json file does matter! You sh
 - [ ] modify render code to prevent overlapping
   - [ ] event overlap
   - [ ] year text overlap
+- [ ] final gui enhancements
+  - [ ] custom colors
+  - [ ] custom top bar class
+  - [ ] custom fonts
+  - [ ] custom icon
 
 ### Test Cases
 
