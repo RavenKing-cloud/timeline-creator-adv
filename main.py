@@ -95,12 +95,12 @@ class EventWindow(QDialog):
 
             self.modified = False  # Reset modified flag after saving
 
-            # Show confirmation message
-            QMessageBox.information(self, 'Save Successful', 'Event data has been successfully saved.')
-
             # Reload events into selector and timeline in MainWindow
             mainWindow.load_events_into_selector(self.file_path)
             mainWindow.render_timeline_from_file(self.file_path)
+
+            # Show confirmation message
+            QMessageBox.information(self, 'Save Successful', 'Event data has been successfully saved.')
 
         except Exception as e:
             print(f"Error saving event data: {e}")
@@ -255,6 +255,7 @@ class MainWindow(QMainWindow):
 
     def render_timeline_from_file(self, file_path):
         try:
+            sort_json(file_path)
             img_path = render_timeline(file_path, self.dark_mode)
             pixmap = QPixmap(img_path)
             self.lbl_image.setPixmap(pixmap)
@@ -357,7 +358,7 @@ class MainWindow(QMainWindow):
                 json_data = json.load(json_file)
                 for event in json_data.get('events', []):
                     event_date = datetime.date(event['date'][2], event['date'][0], event['date'][1])
-                    event_text = f"{event['name']} ({event_date.strftime('%B %d, %Y')})"
+                    event_text = f"{event['name']}\n({event_date.strftime('%B %d, %Y')})\n"
                     item = QListWidgetItem(event_text)
                     item.setData(Qt.UserRole, event)
                     self.event_list.addItem(item)

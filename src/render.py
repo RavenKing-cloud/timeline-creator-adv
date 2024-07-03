@@ -56,16 +56,24 @@ def render_timeline(json_file_path, darkmode: bool):
         text_size = text_draw.textbbox((0, 0), name, font=font)
         text_draw.text((0, 0), name, color, font=font)
 
+        # Add an offset if events are within 10 days of eachother on the same event line
+        offset = 0 # Default offset of 0
+        # 2 events before the current ones position to get the previous event on the current side of the event line
+        last_event_pos = datenum(timeline_data['events'][event_num - 3]['date']) - start_date
+        # Check if the difference between the current pos and the last pos is less than 10 days (19 as its datenum)
+        if (np.abs(pos - last_event_pos) <= datenum([0,10,0])):
+            offset = 15 # Set the offset to 15 to prevent overlap of event text
+
         if event_num % 2 == 1:
-            draw.line([(pos, 360), (pos, 340), (pos + 20, 320)], fill=color, width=2)
+            draw.line([(pos, 360), (pos, 340 + offset), (pos + 20, 320 + offset)], fill=color, width=2)
             rotated_text_img = text_img.rotate(45, expand=True)
             x = pos + 232 - rotated_text_img.width // 2
-            y = 244 - rotated_text_img.height // 2
+            y = (244 + offset) - rotated_text_img.height // 2
         else:
-            draw.line([(pos, 360), (pos, 380), (pos + 20, 400)], fill=color, width=2)
+            draw.line([(pos, 360), (pos, 380 - offset), (pos + 20, 400 - offset)], fill=color, width=2)
             rotated_text_img = text_img.rotate(-45, expand=True)
             x = pos + 97 - rotated_text_img.width // 2
-            y = 612 - rotated_text_img.height // 2
+            y = (612 - offset) - rotated_text_img.height // 2
 
         img.paste(rotated_text_img, (x, y), rotated_text_img)
 
