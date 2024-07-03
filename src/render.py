@@ -38,10 +38,13 @@ def render_timeline(json_file_path, darkmode: bool):
     font_path = os.path.join(os.path.dirname(__file__), '..', 'font', 'font.ttf')
     font = ImageFont.truetype(font_path, 16)
 
-    if darkmode:
-        color = (255,255,255)
-    else:
-        color = (0,0,0)
+    def is_darkmode(bool: bool):
+        if bool:
+            return (255,255,255)
+        else:
+            return (0,0,0)
+
+    color = is_darkmode(darkmode)
 
     # Show events on the timeline
     event_num = 0
@@ -49,12 +52,6 @@ def render_timeline(json_file_path, darkmode: bool):
         event_num += 1
         pos = datenum(event['date']) - start_date  # Get event's position on the timeline
         name = event['name']  # Get name of the event
-
-        # Prepare for text rendering
-        text_img = Image.new('RGBA', (400, 200), (255, 255, 255, 0))  # Adjusted size for better accommodation of rotated text
-        text_draw = ImageDraw.Draw(text_img)
-        text_size = text_draw.textbbox((0, 0), name, font=font)
-        text_draw.text((0, 0), name, color, font=font)
 
         # Add an offset if events are within 10 days of eachother on the same event line
         offset = 0 # Default offset of 0
@@ -64,29 +61,39 @@ def render_timeline(json_file_path, darkmode: bool):
         if (np.abs(pos - last_event_pos) <= datenum([0,10,0])):
             offset = 15 # Set the offset to 15 to prevent overlap of event text
 
+        # Prepare for text rendering
+        text_img = Image.new('RGBA', (400, 200), (255, 255, 255, 0))  # Adjusted size for better accommodation of rotated text
+        text_draw = ImageDraw.Draw(text_img)
+        text_size = text_draw.textbbox((0, 0), name, font=font)
+        text_draw.text((0, 0), name, color, font=font)
+
         if event_num % 2 == 1:
             draw.line([(pos, 360), (pos, 340 + offset), (pos + 20, 320 + offset)], fill=color, width=2)
             rotated_text_img = text_img.rotate(45, expand=True)
-            x = pos + 232 - rotated_text_img.width // 2
+            x = pos + 230 - rotated_text_img.width // 2
             y = (244 + offset) - rotated_text_img.height // 2
         else:
             draw.line([(pos, 360), (pos, 380 - offset), (pos + 20, 400 - offset)], fill=color, width=2)
             rotated_text_img = text_img.rotate(-45, expand=True)
-            x = pos + 97 - rotated_text_img.width // 2
+            x = pos + 99 - rotated_text_img.width // 2
             y = (612 - offset) - rotated_text_img.height // 2
 
         img.paste(rotated_text_img, (x, y), rotated_text_img)
-
-    # Loop through all the years the timeline covers
-    for i in range(timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1):
-        pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the year
-        draw.line([(pos, 340), (pos, 380)], fill=color, width=4)  # Draw line through the main line
-        draw.text((pos - 19, 326), str(timeline_data['start_date'][2] + i), color, font=font)  # Render year
 
     # Loop through all the months the timeline covers
     for i in range((timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1)*12 - 1):
         pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the month
         draw.line([(pos // 12 - 4, 355), (pos // 12 - 4, 365)], fill=color, width=4)  # Draw line through the main line
+
+    # Loop through all the years the timeline covers
+    for i in range(timeline_data['end_date'][2] - timeline_data['start_date'][2] + 1):
+        pos = datenum([1, 1, timeline_data['start_date'][2] + i]) - start_date  # Get position of the year
+        draw.line([(pos, 340), (pos, 380)], fill=color, width=4)  # Draw line through the main line
+        if darkmode:
+            draw.rectangle([(pos - 24, 350), (pos + 24, 370)], fill=(53, 53, 53), width=4)  # Draw line through the main line
+        else:
+            draw.rectangle([(pos - 24, 350), (pos + 24, 370)], fill=(255, 255, 255), width=4)  # Draw line through the main line
+        draw.text((pos, 365), str(timeline_data['start_date'][2] + i), color, font=font, anchor="ms")  # Render year
 
     # Draw the top right text
     font_large = ImageFont.truetype(font_path, 36)
