@@ -74,6 +74,9 @@ Please note that the order you enter them into the json file does matter! You sh
   - [ ] custom top bar class
   - [ ] custom fonts
   - [ ] custom icon
+- [ ] add fully comprehensive documentation
+  - [ ] inline docs
+  - [ ] final readme
 
 ### Test Cases
 
