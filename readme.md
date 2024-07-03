@@ -2,7 +2,7 @@
 
 Made by [@TauCommands](https://github.com/TenCommands) & [@RavenKing-cloud](https://github.com/RavenKing-cloud)
 
-## Requirements:
+## Requirements
 
 PIL
 ```pip install --upgrade PILLOW```
@@ -10,12 +10,13 @@ PIL
 PyQt5
 ```pip install --upgrade PyQt5```
 
-## How to use:
+## How to use
 
 1. Run the `run.bat` file within the project folder
-2. Click `Open JSON File` and select a JSON file containing the proper values
+2. Click `Open JSON File` and select a JSON file containing the proper values or click `Create New Timeline` to create a new timeline
 3. You can now see your timeline image in the window which you can find in the `export` folder
-4. You can edit the timeline using the `json` file syntax below:
+4. You can edit your open timeline directly through the interface by editing or adding events
+5. We recommend that you edit and create new timelines through the interface but you can also edit the timeline using the `json` file syntax below:
 
 ```json
 {
