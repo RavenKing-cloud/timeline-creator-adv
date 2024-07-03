@@ -98,11 +98,9 @@ class EventWindow(QDialog):
             # Show confirmation message
             QMessageBox.information(self, 'Save Successful', 'Event data has been successfully saved.')
 
-            # TODO: Fix the reloading of GUI
-            # Reload events into selector in MainWindow
-            if self.parent() and isinstance(self.parent(), MainWindow):
-                self.parent().render_timeline(self.file_path)
-                self.parent().load_events_into_selector(self.file_path)
+            # Reload events into selector and timeline in MainWindow
+            mainWindow.load_events_into_selector(self.file_path)
+            mainWindow.render_timeline_from_file(self.file_path)
 
         except Exception as e:
             print(f"Error saving event data: {e}")
@@ -130,7 +128,7 @@ class EventWindow(QDialog):
 
     def delete_event(self):
         confirm = QMessageBox.question(self, 'Delete Event', 'Are you sure you want to delete this event?',
-                                       QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if confirm == QMessageBox.Yes:
             try:
                 with open(self.file_path, 'r') as json_file:
@@ -140,6 +138,10 @@ class EventWindow(QDialog):
 
                 with open(self.file_path, 'w') as json_file:
                     json.dump(json_data, json_file, indent=4)
+
+                # Reload events into selector and timeline in MainWindow
+                mainWindow.load_events_into_selector(self.file_path)
+                mainWindow.render_timeline_from_file(self.file_path)
 
                 self.accept()  # Close the dialog after deletion
             except Exception as e:
@@ -196,7 +198,7 @@ class MainWindow(QMainWindow):
 
         # ListWidget for event selection
         self.event_list = QListWidget()
-        self.event_list.setFixedWidth(230)  # Adjust the width as needed
+        self.event_list.setFixedWidth(250)  # Adjust the width as needed
         self.event_list.itemClicked.connect(self.display_event)
         h_layout.addWidget(self.event_list)
 
@@ -320,8 +322,9 @@ class MainWindow(QMainWindow):
 
                                 print(f"Event '{event_name}' added to {self.current_file_path}")
                                 sort_json(self.current_file_path)
-                                self.render_timeline_from_file(self.current_file_path)
+                                # Reload events into selector and timeline
                                 self.load_events_into_selector(self.current_file_path)
+                                self.render_timeline_from_file(self.current_file_path)
                             else:
                                 print("No image selected.")
                         else:
@@ -336,7 +339,7 @@ class MainWindow(QMainWindow):
             print("No file is currently open.")
 
     def get_image_file(self):
-        image_dir = os.path.join(os.path.dirname(__file__), '..', 'images')
+        image_dir = os.path.join(os.path.dirname(__file__), 'images')
         if not os.path.exists(image_dir):
             os.makedirs(image_dir)
 

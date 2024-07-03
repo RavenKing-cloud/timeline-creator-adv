@@ -12,6 +12,18 @@
     ],
     "events": [
         {
+            "name": "test",
+            "date": [
+                7,
+                20,
+                2001
+            ],
+            "description": "test",
+            "images": [
+                "images\\test.png"
+            ]
+        },
+        {
             "name": "smashkey",
             "date": [
                 6,
@@ -24,7 +36,7 @@
             ]
         },
         {
-            "name": "test image",
+            "name": "TauCommands",
             "date": [
                 7,
                 27,
