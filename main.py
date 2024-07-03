@@ -3,8 +3,9 @@ import json
 import os
 import datetime
 from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QFileDialog, QLabel, QScrollArea, QMainWindow,
-                             QAction, QToolBar, QInputDialog, QVBoxLayout, QComboBox, QLineEdit, QDateEdit, 
-                             QPushButton, QFileDialog, QFormLayout, QLabel, QDialog, QTextEdit, QMessageBox)
+                             QAction, QToolBar, QInputDialog, QVBoxLayout, QListWidget, QLineEdit, QDateEdit, 
+                             QPushButton, QFileDialog, QFormLayout, QLabel, QDialog, QTextEdit, QMessageBox,
+                             QListWidgetItem, QHBoxLayout)
 from PyQt5.QtGui import QPixmap, QIcon, QPalette, QColor
 from PyQt5.QtCore import Qt
 from src.render import render_timeline
@@ -97,11 +98,9 @@ class EventWindow(QDialog):
             # Show confirmation message
             QMessageBox.information(self, 'Save Successful', 'Event data has been successfully saved.')
 
-            # TODO: Fix the reloading of GUI
-            # Reload events into selector in MainWindow
-            if self.parent() and isinstance(self.parent(), MainWindow):
-                self.parent().render_timeline(self.file_path)
-                self.parent().load_events_into_selector(self.file_path)
+            # Reload events into selector and timeline in MainWindow
+            mainWindow.load_events_into_selector(self.file_path)
+            mainWindow.render_timeline_from_file(self.file_path)
 
         except Exception as e:
             print(f"Error saving event data: {e}")
@@ -129,7 +128,7 @@ class EventWindow(QDialog):
 
     def delete_event(self):
         confirm = QMessageBox.question(self, 'Delete Event', 'Are you sure you want to delete this event?',
-                                       QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if confirm == QMessageBox.Yes:
             try:
                 with open(self.file_path, 'r') as json_file:
@@ -139,6 +138,10 @@ class EventWindow(QDialog):
 
                 with open(self.file_path, 'w') as json_file:
                     json.dump(json_data, json_file, indent=4)
+
+                # Reload events into selector and timeline in MainWindow
+                mainWindow.load_events_into_selector(self.file_path)
+                mainWindow.render_timeline_from_file(self.file_path)
 
                 self.accept()  # Close the dialog after deletion
             except Exception as e:
@@ -188,9 +191,18 @@ class MainWindow(QMainWindow):
         toolbar.addAction(dark_mode_action)
 
         # Layout
-        layout = QVBoxLayout()
+        main_layout = QVBoxLayout()
 
-        # Scroll Area
+        # Horizontal layout to manage size allocation
+        h_layout = QHBoxLayout()
+
+        # ListWidget for event selection
+        self.event_list = QListWidget()
+        self.event_list.setFixedWidth(250)  # Adjust the width as needed
+        self.event_list.itemClicked.connect(self.display_event)
+        h_layout.addWidget(self.event_list)
+
+        # Scroll Area for timeline display
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
 
@@ -198,16 +210,13 @@ class MainWindow(QMainWindow):
         self.lbl_image = QLabel()
         scroll_area.setWidget(self.lbl_image)
 
-        layout.addWidget(scroll_area)
+        h_layout.addWidget(scroll_area)
 
-        # ComboBox for event selection
-        self.event_selector = QComboBox()
-        self.event_selector.currentIndexChanged.connect(self.display_event)
-        layout.addWidget(self.event_selector)
+        main_layout.addLayout(h_layout)
 
         # Create a central widget and set the layout
         central_widget = QWidget()
-        central_widget.setLayout(layout)
+        central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
 
     def toggle_dark_mode(self):
@@ -313,8 +322,9 @@ class MainWindow(QMainWindow):
 
                                 print(f"Event '{event_name}' added to {self.current_file_path}")
                                 sort_json(self.current_file_path)
-                                self.render_timeline_from_file(self.current_file_path)
+                                # Reload events into selector and timeline
                                 self.load_events_into_selector(self.current_file_path)
+                                self.render_timeline_from_file(self.current_file_path)
                             else:
                                 print("No image selected.")
                         else:
@@ -329,7 +339,7 @@ class MainWindow(QMainWindow):
             print("No file is currently open.")
 
     def get_image_file(self):
-        image_dir = os.path.join(os.path.dirname(__file__), '..', 'images')
+        image_dir = os.path.join(os.path.dirname(__file__), 'images')
         if not os.path.exists(image_dir):
             os.makedirs(image_dir)
 
@@ -341,19 +351,21 @@ class MainWindow(QMainWindow):
             return None
 
     def load_events_into_selector(self, file_path):
-        self.event_selector.clear()
+        self.event_list.clear()
         try:
             with open(file_path, 'r') as json_file:
                 json_data = json.load(json_file)
                 for event in json_data.get('events', []):
                     event_date = datetime.date(event['date'][2], event['date'][0], event['date'][1])
                     event_text = f"{event['name']} ({event_date.strftime('%B %d, %Y')})"
-                    self.event_selector.addItem(event_text, event)
+                    item = QListWidgetItem(event_text)
+                    item.setData(Qt.UserRole, event)
+                    self.event_list.addItem(item)
         except Exception as e:
             print(f"Error loading events: {e}")
 
-    def display_event(self):
-        event_data = self.event_selector.currentData()
+    def display_event(self, item):
+        event_data = item.data(Qt.UserRole)
         if event_data:
             self.event_window = EventWindow(event_data, self.current_file_path)
             result = self.event_window.exec_()

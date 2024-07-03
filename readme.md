@@ -2,7 +2,7 @@
 
 Made by [@TauCommands](https://github.com/TenCommands) & [@RavenKing-cloud](https://github.com/RavenKing-cloud)
 
-## Requirements:
+## Requirements
 
 PIL
 ```pip install --upgrade PILLOW```
@@ -10,12 +10,13 @@ PIL
 PyQt5
 ```pip install --upgrade PyQt5```
 
-## How to use:
+## How to use
 
 1. Run the `run.bat` file within the project folder
-2. Click `Open JSON File` and select a JSON file containing the proper values
+2. Click `Open JSON File` and select a JSON file containing the proper values or click `Create New Timeline` to create a new timeline
 3. You can now see your timeline image in the window which you can find in the `export` folder
-4. You can edit the timeline using the `json` file syntax below:
+4. You can edit your open timeline directly through the interface by editing or adding events
+5. We recommend that you edit and create new timelines through the interface but you can also edit the timeline using the `json` file syntax below:
 
 ```json
 {
@@ -63,18 +64,22 @@ Please note that the order you enter them into the json file does matter! You sh
 - [x] select event from toolbar to view tooltip
   - [x] pop out display with image and (live edit*)
     - [x] delete button with confirmation
-    - [ ] make the display update and reload when event is edited and saved
+    - [x] make the display update and reload when event is edited and saved
+- [ ] fix single line list encoder to be a function in src
 - [ ] modify render code to prevent overlapping
   - [ ] event overlap
   - [ ] year text overlap
+- [ ] final gui enhancements
+  - [ ] custom colors
+  - [ ] custom top bar class
+  - [ ] custom fonts
+  - [ ] custom icon
+- [ ] add fully comprehensive documentation
+  - [ ] inline docs
+  - [ ] final readme
 
 ### Test Cases
 
 - [ ] darkmode
   - [ ] load json with darmode active
   - [ ] activate darkmode with json pre-loaded
-
-### Bugs
-
-- [ ] does not update entire main gui on save through event window
-- [ ] auto event window opening on render
