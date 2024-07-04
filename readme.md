@@ -66,9 +66,9 @@ Please note that the order you enter them into the json file does matter! You sh
     - [x] delete button with confirmation
     - [x] make the display update and reload when event is edited and saved
 - [ ] fix single line list encoder to be a function in src
-- [ ] modify render code to prevent overlapping
-  - [ ] event overlap
-  - [ ] year text overlap
+- [X] modify render code to prevent overlapping
+  - [X] event overlap
+  - [X] year text overlap
 - [ ] final gui enhancements
   - [ ] custom colors
   - [ ] custom top bar class
@@ -77,6 +77,8 @@ Please note that the order you enter them into the json file does matter! You sh
 - [ ] add fully comprehensive documentation
   - [ ] inline docs
   - [ ] final readme
+- [ ] make timeline render images in the background
+  - [ ] make this be a toggle*
 
 ### Test Cases
 
