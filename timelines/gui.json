@@ -12,18 +12,6 @@
     ],
     "events": [
         {
-            "name": "test",
-            "date": [
-                7,
-                20,
-                2003
-            ],
-            "description": "test",
-            "images": [
-                "images\\test.png"
-            ]
-        },
-        {
             "name": "smashkey",
             "date": [
                 6,
@@ -31,6 +19,18 @@
                 2002
             ],
             "description": "hello",
+            "images": [
+                "images\\test.png"
+            ]
+        },
+        {
+            "name": "test",
+            "date": [
+                7,
+                20,
+                2003
+            ],
+            "description": "test",
             "images": [
                 "images\\test.png"
             ]
