@@ -56,15 +56,15 @@ Please note that the order you enter them into the json file does matter! You sh
 
 ### Todo
 
-- [x] toolbar
-  - [x] create timeline file
-  - [x] add event to timeline
-    - [x] modify logic to sort and overwrite json data
-- [x] integrate sort logic to main
-- [x] select event from toolbar to view tooltip
-  - [x] pop out display with image and (live edit*)
-    - [x] delete button with confirmation
-    - [x] make the display update and reload when event is edited and saved
+- [X] toolbar
+  - [X] create timeline file
+  - [X] add event to timeline
+    - [X] modify logic to sort and overwrite json data
+- [X] integrate sort logic to main
+- [X] select event from toolbar to view tooltip
+  - [X] pop out display with image and (live edit*)
+    - [X] delete button with confirmation
+    - [X] make the display update and reload when event is edited and saved
 - [ ] fix single line list encoder to be a function in src
 - [X] modify render code to prevent overlapping
   - [X] event overlap
@@ -83,5 +83,5 @@ Please note that the order you enter them into the json file does matter! You sh
 ### Test Cases
 
 - [ ] darkmode
-  - [ ] load json with darmode active
+  - [ ] load json with darkmode active
   - [ ] activate darkmode with json pre-loaded
