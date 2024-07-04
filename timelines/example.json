@@ -1,25 +1,45 @@
 {
     "timeline_name": "Example Timeline Name",
-    "start_date": [1,1,2024],
-    "end_date": [1,1,2024],
+    "start_date": [
+        1,
+        1,
+        2024
+    ],
+    "end_date": [
+        1,
+        1,
+        2025
+    ],
     "events": [
-            {
-                "name": "Event 1",
-                "date": [2,29,2024],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Event 2",
-                "date": [3,3,2024],
-                "description": "",
-                "images": []
-            },
-            {
-                "name": "Event 3",
-                "date": [4,24,2024],
-                "description": "",
-                "images": []
-            }
+        {
+            "name": "Event 1",
+            "date": [
+                2,
+                29,
+                2024
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Event 2",
+            "date": [
+                3,
+                3,
+                2024
+            ],
+            "description": "",
+            "images": []
+        },
+        {
+            "name": "Event 3",
+            "date": [
+                4,
+                24,
+                2024
+            ],
+            "description": "",
+            "images": []
+        }
     ]
 }

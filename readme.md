@@ -50,7 +50,7 @@ The `start` and `end` dates are given a 6 month padding to the edge of the image
 
 This example leaves you with this:
 
-![export/example.png](https://raw.githubusercontent.com/TenCommands/timeline-creator/18e51acfea240728975de0480692a303cb45bba2/export/example.png)
+![export/example.png](export/example.png)
 
 Please note that the order you enter them into the json file does matter! You should always enter the events in chronological order!*
 
