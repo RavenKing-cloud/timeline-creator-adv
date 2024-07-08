@@ -72,12 +72,11 @@ This example leaves you with this:
   - [X] event overlap
   - [X] year text overlap
 - [ ] final gui enhancements
-  - [ ] custom colors
-  - [ ] custom top bar class
+  - [X] darkmode
   - [ ] custom fonts
   - [ ] custom icon
+- [ ] make timeline render images in the background
+  - [ ] make this be a toggle*
 - [ ] add fully comprehensive documentation
   - [ ] inline docs
   - [ ] final readme
-- [ ] make timeline render images in the background
-  - [ ] make this be a toggle*
