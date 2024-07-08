@@ -52,8 +52,6 @@ This example leaves you with this:
 
 ![export/example.png](export/example.png)
 
-Please note that the order you enter them into the json file does matter! You should always enter the events in chronological order!*
-
 ### Todo
 
 - [X] toolbar
@@ -65,7 +63,7 @@ Please note that the order you enter them into the json file does matter! You sh
   - [X] pop out display with image and (live edit*)
     - [X] delete button with confirmation
     - [X] make the display update and reload when event is edited and saved
-- [ ] fix single line list encoder to be a function in src
+- [X] ~~fix single line list encoder to be a function in src~~
 - [X] modify render code to prevent overlapping
   - [X] event overlap
   - [X] year text overlap
@@ -79,9 +77,3 @@ Please note that the order you enter them into the json file does matter! You sh
   - [ ] final readme
 - [ ] make timeline render images in the background
   - [ ] make this be a toggle*
-
-### Test Cases
-
-- [ ] darkmode
-  - [ ] load json with darkmode active
-  - [ ] activate darkmode with json pre-loaded

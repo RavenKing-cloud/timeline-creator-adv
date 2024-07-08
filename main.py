@@ -378,12 +378,10 @@ class MainWindow(QMainWindow):
         date_dialog = DateDialog(title, self)
         return date_dialog.get_date()
 
-"""Not Currently used or working: vvv"""
-#class SingleLineListJsonEncoder(json.JSONEncoder):
-#    def encode(self, obj):
-#        if isinstance(obj, list):
-#            return '[' + ', '.join(self.encode(el) for el in obj) + ']'
-#        return super(SingleLineListJsonEncoder, self).encode(obj)
+def encode_single_line_list(obj):
+    if isinstance(obj, list):
+        return '[' + ', '.join(encode_single_line_list(el) for el in obj) + ']'
+    return json.dumps(obj)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
