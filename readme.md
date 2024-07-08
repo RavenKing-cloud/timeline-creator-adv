@@ -52,6 +52,10 @@ This example leaves you with this:
 
 ![export/example.png](export/example.png)
 
+### Side Notes
+
+- When selecting `images` you must make sure that it is in the `/images` dir and this is the core storage for images, do not delete images from here! All pathing to images is relative to this dir and the `main.py` script.
+
 ### Todo
 
 - [X] toolbar
