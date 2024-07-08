@@ -52,7 +52,9 @@ This example leaves you with this:
 
 ![export/example.png](export/example.png)
 
-Please note that the order you enter them into the json file does matter! You should always enter the events in chronological order!*
+### Side Notes
+
+- When selecting `images` you must make sure that it is in the `/images` dir and this is the core storage for images, do not delete images from here! All pathing to images is relative to this dir and the `main.py` script.
 
 ### Todo
 
@@ -65,23 +67,16 @@ Please note that the order you enter them into the json file does matter! You sh
   - [X] pop out display with image and (live edit*)
     - [X] delete button with confirmation
     - [X] make the display update and reload when event is edited and saved
-- [ ] fix single line list encoder to be a function in src
+- [X] ~~fix single line list encoder to be a function in src~~
 - [X] modify render code to prevent overlapping
   - [X] event overlap
   - [X] year text overlap
 - [ ] final gui enhancements
-  - [ ] custom colors
-  - [ ] custom top bar class
+  - [X] darkmode
   - [ ] custom fonts
   - [ ] custom icon
+- [ ] make timeline render images in the background
+  - [ ] make this be a toggle*
 - [ ] add fully comprehensive documentation
   - [ ] inline docs
   - [ ] final readme
-- [ ] make timeline render images in the background
-  - [ ] make this be a toggle*
-
-### Test Cases
-
-- [ ] darkmode
-  - [ ] load json with darkmode active
-  - [ ] activate darkmode with json pre-loaded
